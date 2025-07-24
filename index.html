@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrashFire Games | Ignite Your Passion</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/velocity/2.0.6/velocity.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        @font-face {
+            font-family: 'Cigar Box';
+            src: url('https://fonts.cdnfonts.com/css/cigar');
+            font-weight: normal;
+            font-style: normal;
+        }
+        
+        @font-face {
+            font-family: 'Noyh';
+            src: url('https://fonts.cdnfonts.com/css/noyh');
+            font-weight: 300;
+            font-style: normal;
+        }
+        
+        @font-face {
+            font-family: 'Noyh';
+            src: url('https://fonts.cdnfonts.com/css/noyh');
+            font-weight: 400;
+            font-style: normal;
+        }
+        
+        @font-face {
+            font-family: 'Noyh';
+            src: url('https://fonts.cdnfonts.com/css/noyh');
+            font-weight: 700;
+            font-style: normal;
+        }
+        
+        body {
+            font-family: 'Noyh', serif;
+            background-color: #F4EFED;
+            color: #272629;
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4 {
+            font-family: 'Cigar Box', serif;
+        }
+        
+        .hero-gradient {
+            background: linear-gradient(135deg, #FA5A66 0%, #FF8585 50%, #F5BE6B 100%);
+        }
+        
+        .btn-primary {
+            background-color: #FA5A66;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background-color: #FF8585;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(250, 90, 102, 0.3);
+        }
+        
+        .game-card {
+            transition: all 0.3s ease;
+            border: 2px solid #D1D1D1;
+        }
+        
+        .game-card:hover {
+            transform: translateY(-10px);
+            border-color: #FA5A66;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        
+        .floating {
+            animation: floating 6s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .nav-link {
+            position: relative;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: #FA5A66;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .social-icon {
+            transition: all 0.3s ease;
+        }
+        
+        .social-icon:hover {
+            transform: scale(1.2) rotate(10deg);
+        }
+        
+        .flame {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .flame::after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 30px;
+            background: linear-gradient(to top, #F5BE6B, #FA5A66);
+            border-radius: 50% 50% 20% 20%;
+            filter: blur(5px);
+            opacity: 0.8;
+            animation: flicker 3s infinite alternate;
+        }
+        
+        @keyframes flicker {
+            0%, 100% { transform: translateX(-50%) scaleY(1) scaleX(1); opacity: 0.8; }
+            50% { transform: translateX(-50%) scaleY(1.2) scaleX(0.9); opacity: 1; }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+    <!-- Navigation -->
+    <nav class="bg-[#272629] text-[#FDFDFD] py-4 px-6 shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <img src="https://storage.googleapis.com/tfwebmedia/TF_Logo_13.png" alt="Logo" class="w-8 h-8" />
+                <h1 class="text-2xl font-bold" style="font-family: 'Cigar Box', serif;">TrashFire Games</h1>
+            </div>
+            
+            <div class="hidden md:flex space-x-8 items-center">
+                <a href="#home" class="nav-link">Home</a>
+                <a href="#about" class="nav-link">About</a>
+                <a href="#game" class="nav-link">Our Game</a>
+                <a href="#blog" class="nav-link">Blog</a>
+                <a href="#contact" class="nav-link">Contact</a>
+                <button class="btn-primary px-6 py-2 rounded-full text-white font-bold">Press Kit</button>
+            </div>
+            
+            <button class="md:hidden text-2xl" id="mobile-menu-button">☰</button>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div class="md:hidden hidden bg-[#272629] py-4 px-6 absolute w-full left-0 top-full" id="mobile-menu">
+            <div class="flex flex-col space-y-4">
+                <a href="#home" class="nav-link">Home</a>
+                <a href="#about" class="nav-link">About</a>
+                <a href="#game" class="nav-link">Our Game</a>
+                <a href="#blog" class="nav-link">Blog</a>
+                <a href="#contact" class="nav-link">Contact</a>
+                <button class="btn-primary px-6 py-2 rounded-full text-white font-bold w-full">Press Kit</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-gradient text-white py-20 md:py-32 relative overflow-hidden">
+        <div class="container mx-auto px-6 flex flex-col md:flex-row items-center">
+            <div class="md:w-1/2 mb-10 md:mb-0 z-10">
+                <h1 class="text-4xl md:text-6xl font-bold mb-6" style="font-family: 'Cigar Box', serif;">Ignite Your <span class="text-[#F5BE6B]">Passion</span></h1>
+                <p class="text-xl md:text-2xl mb-8" style="font-family: 'Noyh', serif; font-weight: 300;">We make games about messy feelings, meaningful friendships, and magical nonsense.</p>
+                <div class="flex space-x-4">
+                    <button class="btn-primary px-8 py-3 rounded-full text-white font-bold text-lg pulse">Learn More</button>
+                    <button class="bg-transparent border-2 border-white px-8 py-3 rounded-full text-white font-bold text-lg hover:bg-white hover:text-[#272629] transition-all">Watch Trailer</button>
+                </div>
+            </div>
+            <div class="md:w-1/2 flex justify-center z-10">
+                <img src="https://storage.googleapis.com/tfwebmedia/trashfire_hero_aegb.png" alt="Logo" class="rounded-lg shadow-2xl floating w-full max-w-md">
+            </div>
+        </div>
+        <div class="absolute inset-0 z-0 opacity-10">
+            <div class="absolute top-0 left-0 w-32 h-32 bg-[#FFB6C4] rounded-full filter blur-3xl"></div>
+            <div class="absolute bottom-0 right-0 w-32 h-32 bg-[#F5BE6B] rounded-full filter blur-3xl"></div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-[#FDFDFD]">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl md:text-4xl font-bold mb-16 text-center" style="font-family: 'Cigar Box', serif;">About <span class="text-[#FA5A66]">TrashFire Games</span></h2>
+            
+            <div class="flex flex-col md:flex-row items-center mb-16">
+                <div class="md:w-1/2 mb-10 md:mb-0 md:pr-10">
+                    <h3 class="text-2xl font-bold mb-6" style="font-family: 'Cigar Box', serif;">Our Story</h3>
+                    <p class="mb-6" style="font-family: 'Noyh', serif; font-weight: 300;">
+                        Trashfire Games, created in 2022, is a start-up video game studio designed to help professionals learn more about the gaming industry by participating in the production of a game under Trashfire.
+                    </p>
+                    <p class="mb-6" style="font-family: 'Noyh', serif; font-weight: 400;">
+                        Building portfolio work and learning new skills within the members' specialized field, Trashfire consists of four departments: Art, Programming, Audio, and Marketing.
+                    </p>
+                    <p style="font-family: 'Noyh', serif; font-weight: 700;">
+                        We're a tiny, weird, and deeply passionate indie team who just released our first game, An Eternity Gone By. We make games about messy feelings, meaningful friendships, and magical nonsense — and this one means the world to us.
+                    </p>
+                </div>
+                <div class="md:w-1/2">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-[#FDDAC4] p-6 rounded-lg h-40 flex items-center justify-center">
+                            <p class="text-center font-bold" style="font-family: 'Cigar Box', serif;">Art</p>
+                        </div>
+                        <div class="bg-[#F5BE6B] p-6 rounded-lg h-40 flex items-center justify-center">
+                            <img src="https://storage.googleapis.com/tfwebmedia/trashfire_hero_logo.png" alt="Programming Logo" class="inline-block w-40 h-20" />
+
+                        </div>
+                        <div class="bg-[#FFB6C4] p-6 rounded-lg h-40 flex items-center justify-center">
+                            <p class="text-center font-bold" style="font-family: 'Cigar Box', serif;">Audio</p>
+                        </div>
+                        <div class="bg-[#FA5A66] p-6 rounded-lg h-40 flex items-center justify-center text-white">
+                            <p class="text-center font-bold" style="font-family: 'Cigar Box', serif;">Marketing</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-[#F4EFED] p-8 rounded-lg">
+                <h3 class="text-2xl font-bold mb-6 text-center" style="font-family: 'Cigar Box', serif;">Our Philosophy</h3>
+                <p class="text-center max-w-3xl mx-auto" style="font-family: 'Noyh', serif; font-weight: 400;">
+                    At Trashfire, we believe in telling stories that stick with you. We value sincerity over polish, voice over volume, and building things with love (and probably too much coffee).
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Game Section -->
+    <section id="game" class="py-20 bg-[#272629] text-[#FDFDFD]">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl md:text-4xl font-bold mb-16 text-center" style="font-family: 'Cigar Box', serif;">An Eternity <span class="text-[#F5BE6B]">Gone By</span></h2>
+            
+            <div class="flex flex-col lg:flex-row items-center mb-16">
+                <div class="lg:w-1/2 mb-10 lg:mb-0 lg:pr-10">
+                    <div class="game-card bg-[#F4EFED] rounded-lg overflow-hidden">
+                        <img src="https://storage.googleapis.com/tfwebmedia/hero_capsule.png" alt="Game Screenshot" class="w-full">
+                        <div class="p-6">
+                            <h3 class="text-2xl font-bold mb-4 text-[#272629]" style="font-family: 'Cigar Box', serif;">Game Overview</h3>
+                            <p class="text-[#272629] mb-4" style="font-family: 'Noyh', serif; font-weight: 300;">
+                                An Eternity Gone By is a cozy, chaotic hack-and-slash where you play as Mirai, a stubborn telekinetic girl on a mission to save her best friend.
+                            </p>
+                            <p class="text-[#272629]" style="font-family: 'Noyh', serif; font-weight: 400;">
+                                Everything in the game is an object: You hurl chairs and apples and broomsticks at absurd monsters in a dreamlike world — all while navigating a time-looping story about grief, growth, and doing what's right to save your best friend.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+  <div class="w-full min-h-screen px-8 py-12 bg-[#3A3A3D]">
+  <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-8">
+
+    <video class="w-full h-[500px] rounded-lg object-cover" controls>
+      <source src="https://storage.googleapis.com/tfwebmedia/AEGB%20Trailer.mov" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+
+    <video class="w-full h-[500px] rounded-lg object-cover" controls>
+      <source src="https://storage.googleapis.com/tfwebmedia/2025-03-13-18-19-13.mp4" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+
+    <video class="w-full h-[500px] rounded-lg object-cover" controls>
+      <source src="https://storage.googleapis.com/tfwebmedia/Kendrick.mov" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+
+    <video class="w-full h-[500px] rounded-lg object-cover" controls>
+      <source src="https://storage.googleapis.com/tfwebmedia/Discord%20TFG.mp4" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+
+    <video class="w-full h-[500px] rounded-lg object-cover" controls>
+      <source src="https://storage.googleapis.com/tfwebmedia/MONSTERHIGHLIGHTMARSHMOO.mp4" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+
+    <video class="w-full h-[500px] rounded-lg object-cover" controls>
+      <source src="https://storage.googleapis.com/tfwebmedia/Sneak%20Peek%20level%203.mov" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+
+    <video class="w-full h-[500px] rounded-lg object-cover" controls>
+      <source src="https://storage.googleapis.com/tfwebmedia/Review.mp4" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+    
+    <video class="w-full h-[500px] rounded-lg object-cover" controls>
+      <source src="https://storage.googleapis.com/tfwebmedia/Trailer%20Call%20Back.mp4" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+
+  </div>
+</div>
+
+               
+                    </div>
+                    <br></br>
+                    <div class="bg-[#3A3A3D] p-8 rounded-lg">
+                        <h3 class="text-2xl font-bold mb-6" style="font-family: 'Cigar Box', serif;">Game Details</h3>
+                        
+                        <div class="mb-6">
+                            <h4 class="text-xl font-bold mb-2" style="font-family: 'Cigar Box', serif;">Developer:</h4>
+                            <p style="font-family: 'Noyh', serif; font-weight: 300;">Trashfire Games</p>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <h4 class="text-xl font-bold mb-2" style="font-family: 'Cigar Box', serif;">Anticipated Release Date:</h4>
+                            <p style="font-family: 'Noyh', serif; font-weight: 300;">Q3 2024 (July)</p>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <h4 class="text-xl font-bold mb-2" style="font-family: 'Cigar Box', serif;">Platforms:</h4>
+                            <p style="font-family: 'Noyh', serif; font-weight: 300;">PC - Steam, Itch.io, Epic Games</p>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <h4 class="text-xl font-bold mb-2" style="font-family: 'Cigar Box', serif;">Genre:</h4>
+                            <p style="font-family: 'Noyh', serif; font-weight: 300;">Action</p>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-xl font-bold mb-2" style="font-family: 'Cigar Box', serif;">Tags:</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="bg-[#FA5A66] px-3 py-1 rounded-full text-sm">3D Thirdperson</span>
+                                <span class="bg-[#F5BE6B] px-3 py-1 rounded-full text-sm">Hack-and-slash</span>
+                                <span class="bg-[#FFB6C4] px-3 py-1 rounded-full text-sm">rogue-like</span>
+                                <span class="bg-[#FC9862] px-3 py-1 rounded-full text-sm">anime</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Section -->
+    <section id="blog" class="py-20 bg-[#FDFDFD]">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl md:text-4xl font-bold mb-16 text-center" style="font-family: 'Cigar Box', serif;">Latest <span class="text-[#FA5A66]">Blog Posts</span></h2>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+                <!-- Blog Post 1 -->
+                <div class="game-card bg-white rounded-lg overflow-hidden">
+                    <img src="https://via.placeholder.com/400x250" alt="Blog Post" class="w-full">
+                    <div class="p-6">
+                        <span class="text-sm text-[#FA5A66]" style="font-family: 'Noyh', serif; font-weight: 700;">DEVELOPMENT UPDATE</span>
+                        <h3 class="text-xl font-bold mb-2 mt-1" style="font-family: 'Cigar Box', serif;">The Making of Mirai</h3>
+                        <p class="text-sm mb-4" style="font-family: 'Noyh', serif; font-weight: 300;">A deep dive into our protagonist's design process and backstory.</p>
+                        <a href="#" class="text-[#FA5A66] font-bold flex items-center" style="font-family: 'Noyh', serif; font-weight: 400;">
+                            Read More 
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Blog Post 2 -->
+                <div class="game-card bg-white rounded-lg overflow-hidden">
+                    <img src="https://via.placeholder.com/400x250" alt="Blog Post" class="w-full">
+                    <div class="p-6">
+                        <span class="text-sm text-[#F5BE6B]" style="font-family: 'Noyh', serif; font-weight: 700;">TEAM SPOTLIGHT</span>
+                        <h3 class="text-xl font-bold mb-2 mt-1" style="font-family: 'Cigar Box', serif;">Meet Our Art Team</h3>
+                        <p class="text-sm mb-4" style="font-family: 'Noyh', serif; font-weight: 300;">Learn about the talented artists bringing our world to life.</p>
+                        <a href="#" class="text-[#F5BE6B] font-bold flex items-center" style="font-family: 'Noyh', serif; font-weight: 400;">
+                            Read More 
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Blog Post 3 -->
+                <div class="game-card bg-white rounded-lg overflow-hidden">
+                    <img src="https://via.placeholder.com/400x250" alt="Blog Post" class="w-full">
+                    <div class="p-6">
+                        <span class="text-sm text-[#FFB6C4]" style="font-family: 'Noyh', serif; font-weight: 700;">BEHIND THE SCENES</span>
+                        <h3 class="text-xl font-bold mb-2 mt-1" style="font-family: 'Cigar Box', serif;">Soundtrack Sneak Peek</h3>
+                        <p class="text-sm mb-4" style="font-family: 'Noyh', serif; font-weight: 300;">Our composer shares insights into the game's musical themes.</p>
+                        <a href="#" class="text-[#FFB6C4] font-bold flex items-center" style="font-family: 'Noyh', serif; font-weight: 400;">
+                            Read More 
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center">
+                <button class="btn-primary px-8 py-3 rounded-full text-white font-bold text-lg">View All Posts</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="py-16 bg-[#FDDAC4]">
+        <div class="container mx-auto px-6 max-w-4xl">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold mb-4" style="font-family: 'Cigar Box', serif;">Stay Updated</h2>
+                <p class="text-lg" style="font-family: 'Noyh', serif; font-weight: 300;">Subscribe to our newsletter for the latest news and updates about An Eternity Gone By.</p>
+            </div>
+            
+            <form class="flex flex-col sm:flex-row gap-4">
+                <input type="email" placeholder="Your email address" class="flex-grow px-6 py-3 rounded-full border-0 focus:ring-2 focus:ring-[#FA5A66]">
+                <button type="submit" class="btn-primary px-8 py-3 rounded-full text-white font-bold">Subscribe</button>
+            </form>
+            
+            <p class="text-center mt-4 text-sm" style="font-family: 'Noyh', serif; font-weight: 300;">We respect your privacy. Unsubscribe at any time.</p>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-[#272629] text-[#FDFDFD]">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl md:text-4xl font-bold mb-16 text-center" style="font-family: 'Cigar Box', serif;">Get In <span class="text-[#F5BE6B]">Touch</span></h2>
+            
+            <div class="flex flex-col lg:flex-row gap-12">
+                <div class="lg:w-1/2">
+                    <h3 class="text-2xl font-bold mb-6" style="font-family: 'Cigar Box', serif;">Connect With Us</h3>
+                    
+                    <div class="mb-8">
+                        <h4 class="text-xl font-bold mb-4" style="font-family: 'Cigar Box', serif;">Follow Our Journey</h4>
+                        <div class="flex space-x-6">
+                            <a href="https://instagram.com/TRASHFIRE_GAMES" target="_blank" class="social-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-instagram">
+                                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                                </svg>
+                            </a>
+                            <a href="https://facebook.com/TRASHFIREGAMES" target="_blank" class="social-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-facebook">
+                                    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                                </svg>
+                            </a>
+                            <a href="https://twitter.com/TRASHFIRELLC" target="_blank" class="social-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-twitter">
+                                    <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4 class="text-xl font-bold mb-4" style="font-family: 'Cigar Box', serif;">Press Inquiries</h4>
+                        <p style="font-family: 'Noyh', serif; font-weight: 300;">For press and media inquiries, please contact us at:</p>
+                        <a href="mailto:press@trashfiregames.com" class="text-[#F5BE6B] font-bold" style="font-family: 'Noyh', serif; font-weight: 400;">press@trashfiregames.com</a>
+                    </div>
+                </div>
+                
+                <div class="lg:w-1/2">
+                    <h3 class="text-2xl font-bold mb-6" style="font-family: 'Cigar Box', serif;">Send Us A Message</h3>
+                    
+                    <form class="space-y-4">
+                        <div>
+                            <label for="name" class="block mb-1" style="font-family: 'Noyh', serif; font-weight: 400;">Name</label>
+                            <input type="text" id="name" class="w-full px-4 py-2 rounded bg-[#3A3A3D] border border-[#D1D1D1] focus:border-[#F5BE6B] focus:ring-[#F5BE6B]">
+                        </div>
+                        
+                        <div>
+                            <label for="email" class="block mb-1" style="font-family: 'Noyh', serif; font-weight: 400;">Email</label>
+                            <input type="email" id="email" class="w-full px-4 py-2 rounded bg-[#3A3A3D] border border-[#D1D1D1] focus:border-[#F5BE6B] focus:ring-[#F5BE6B]">
+                        </div>
+                        
+                        <div>
+                            <label for="message" class="block mb-1" style="font-family: 'Noyh', serif; font-weight: 400;">Message</label>
+                            <textarea id="message" rows="4" class="w-full px-4 py-2 rounded bg-[#3A3A3D] border border-[#D1D1D1] focus:border-[#F5BE6B] focus:ring-[#F5BE6B]"></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn-primary px-8 py-3 rounded-full text-white font-bold">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-[#3A3A3D] text-[#FDFDFD] py-10">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="flex items-center space-x-2 mb-6 md:mb-0">
+                    
+                    <img src="https://storage.googleapis.com/tfwebmedia/TF_Logo_13.png" alt="Logo" class="w-8 h-8" /><h2 class="text-xl font-bold" style="font-family: 'Cigar Box', serif;">TrashFire Games</h2>
+                </div>
+                
+                <div class="flex space-x-6">
+                    <a href="#" class="text-sm" style="font-family: 'Noyh', serif; font-weight: 300;">Privacy Policy</a>
+                    <a href="#" class="text-sm" style="font-family: 'Noyh', serif; font-weight: 300;">Terms of Service</a>
+                    <a href="#" class="text-sm" style="font-family: 'Noyh', serif; font-weight: 300;">Press Kit</a>
+                </div>
+            </div>
+            
+            <div class="border-t border-[#D1D1D1] mt-8 pt-8 text-center">
+                <p style="font-family: 'Noyh', serif; font-weight: 300;">&copy; 2023 TrashFire Games. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+
+        // GSAP Animations
+        gsap.from("nav", {duration: 1, y: -100, opacity: 0, ease: "power3.out"});
+        gsap.from(".hero-gradient h1", {duration: 1, y: 50, opacity: 0, delay: 0.3, ease: "power3.out"});
+        gsap.from(".hero-gradient p", {duration: 1, y: 50, opacity: 0, delay: 0.5, ease: "power3.out"});
+        gsap.from(".hero-gradient button", {duration: 1, y: 50, opacity: 0, delay: 0.7, ease: "power3.out", stagger: 0.2});
+        gsap.from(".hero-gradient img", {duration: 1, x: 50, opacity: 0, delay: 0.9, ease: "power3.out"});
+
+        // Scroll animations
+        const sections = document.querySelectorAll('section');
+        sections.forEach(section => {
+            gsap.from(section, {
+                scrollTrigger: {
+                    trigger: section,
+                    start: "top 80%",
+                    toggleActions: "play none none none"
+                },
+                opacity: 0,
+                y: 50,
+                duration: 1,
+                ease: "power3.out"
+            });
+        });
+
+        // Velocity animations for buttons
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('mouseenter', function() {
+                Velocity(this, {scale: 1.05}, {duration: 200});
+            });
+            button.addEventListener('mouseleave', function() {
+                Velocity(this, {scale: 1}, {duration: 200});
+            });
+        });
+    </script>
+</body>
+</html>
